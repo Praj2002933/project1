@@ -1,9 +1,9 @@
-import cv2 
+import cv2 as cv
 import streamlit as st
 from PIL import Image
 import numpy as np
 
-net = cv2.dnn.readNetFromTensorflow("graph_opt.pb")
+net = cv.dnn.readNetFromTensorflow("graph_opt.pb")
 inWidth = 368
 inHeight = 368
 thr = 0.2
@@ -43,9 +43,9 @@ def pose_estimation_web(frame):
         idFrom = BODY_PARTS[partFrom]
         idTo = BODY_PARTS[partTo]
         if points[idFrom] and points[idTo]:
-            cv2.line(frame, points[idFrom], points[idTo], (0, 255, 0), 3)
-            cv2.ellipse(frame, points[idFrom], (3, 3), 0, 0, 360, (0, 0, 255), cv.FILLED)
-            cv2.ellipse(frame, points[idTo], (3, 3), 0, 0, 360, (0, 0, 255), cv.FILLED)
+            cv.line(frame, points[idFrom], points[idTo], (0, 255, 0), 3)
+            cv.ellipse(frame, points[idFrom], (3, 3), 0, 0, 360, (0, 0, 255), cv.FILLED)
+            cv.ellipse(frame, points[idTo], (3, 3), 0, 0, 360, (0, 0, 255), cv.FILLED)
 
     return frame
 
@@ -55,6 +55,6 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png"])
 
 if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image = cv2.imdecode(file_bytes, cv.IMREAD_COLOR)
+    image = cv.imdecode(file_bytes, cv.IMREAD_COLOR)
     estimated_image = pose_estimation_web(image)
     st.image(estimated_image, channels="BGR")
